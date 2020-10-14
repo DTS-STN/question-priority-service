@@ -4,8 +4,8 @@ import (
 	"github.com/DTS-STN/question-priority-service/logger"
 	_ "github.com/DTS-STN/question-priority-service/docs"
 	"github.com/swaggo/echo-swagger" // echo-swagger middleware
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	
 	"net/http"
 	"sync/atomic"
