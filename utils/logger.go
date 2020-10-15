@@ -1,4 +1,4 @@
-package logger
+package utils
 
 import (
 	"os"
@@ -14,20 +14,14 @@ type (
 )
 
 func NewLogger() *Logging {
-	//Get current working directory to dump logs to
-	path, err := os.Getwd()
-	if err != nil {
-		return nil
-	}
-
 	//Open a file to write logs to
-	lf, err := os.OpenFile(path+"/log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0660)
+	lf, err := os.OpenFile("log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0660)
 	if err != nil {
 		logger.Fatalf("Failed to open log file: %v", err)
 	}
 	//Return a new Logging struct with a Logger already Init-ed
 	return &Logging{
-		Logger:   logger.Init("LoggerExample", true, true, lf),
+		Logger:   logger.Init("LoggerExample", true, false, lf),
 	}
 }
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/DTS-STN/question-priority-service/logger"
+	"github.com/DTS-STN/question-priority-service/utils"
 	_ "github.com/DTS-STN/question-priority-service/docs"
 	"github.com/swaggo/echo-swagger" // echo-swagger middleware
 	"github.com/labstack/echo/v4"
@@ -43,7 +43,7 @@ func main() {
 	e := echo.New()
 
 	//Declare new custom logger
-	logTest := logger.NewLogger()
+	logTest := utils.NewLogger()
 
 	// Middleware
 	e.Use(logTest.Process)
