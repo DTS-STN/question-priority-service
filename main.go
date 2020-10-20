@@ -20,7 +20,7 @@ import (
 
 // User struct
 type User struct {
-	Name string `json::"name"`
+	Name string `json:"name"`
 	UserID int64 `json:"userID"`
 }
 
