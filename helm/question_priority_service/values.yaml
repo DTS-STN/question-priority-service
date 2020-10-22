@@ -3,26 +3,20 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 
-# extraEnv:
-#   - name: SERVER_URL
-#     value: dts-teamcity-service
-#   - name: DOCKER_IN_DOCKER
-#     value: start
-
 port:
   enabled: true
   name: http
-  port: 1234
+  port: 8080
   protocol: TCP
 
 image:
-  repository: jetbrains/teamcity-server
+  repository: mtscontainers.azurecr.io/question-priority-service
   tag: latest
   pullPolicy: Always
 
 service:
   type: ClusterIP
-  port: 8111
+  port: 80
 
 ingress:
   enabled: true
@@ -35,21 +29,15 @@ tolerations: []
 
 affinity: {}
 
-networkPolicy:
-  enabled: false
-  ingressCidrBlock: 10.100.1.0/24
-  egressPodMatchLabels:
-    app: database
-
 livenessProbe:
   enabled: false
   delay: 30
-  path: /
+  path: /healthcheck
 
 readinessProbe:
   enabled: false
   delay: 30
-  path: /
+  path: /healthcheck
 
 # replicaCount: 1
 
