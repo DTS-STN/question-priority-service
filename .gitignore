@@ -6,3 +6,6 @@ question-priority-service
 #air tmp files
 tmp/air_errors.log
 tmp/main
+
+# IDE's
+.idea
