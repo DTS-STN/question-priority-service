@@ -19,7 +19,7 @@ releases:
 # Question Priority Service
   - name: qps-{{ .Environment.Name }}
     chart: qps/question-priority-service
-    version: 0.0.3
+    version: 0.0.1
     values:
       - overrides/qps.yaml.gotmpl
     labels:
