@@ -1,41 +1,24 @@
 package main
 
 import (
-	"github.com/DTS-STN/question-priority-service/utils"
 	_ "github.com/DTS-STN/question-priority-service/docs"
-	"github.com/swaggo/echo-swagger" // echo-swagger middleware
+	"github.com/DTS-STN/question-priority-service/openfisca"
+	"github.com/DTS-STN/question-priority-service/utils"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	
+	"github.com/swaggo/echo-swagger" // echo-swagger middleware
+
+	"fmt"
+	"io/ioutil"
 	"net/http"
-	"sync/atomic"
 )
 
 // @title Simple Echo Test
 // @version 1.0
 // @description This is a simple test of the Echo framework.
 
-// @host localhost:1234
+// @host localhost:8080
 // @BasePath /
-
-// User struct
-type User struct {
-	Name string `json:"name"`
-	UserID int64 `json:"userID"`
-}
-
-// Declare a local userCount
-var userCount int64
-
-// increments the userCount using the atomic library so it can only be done one at a time
-func incUserCount() int64 {
-	return atomic.AddInt64(&userCount, 1)
-}
-
-// returns the current userCount
-func getUserCount() int64 {
-	return atomic.LoadInt64(&userCount)
-}
 
 func main() {
 
@@ -51,43 +34,45 @@ func main() {
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	// Routes
-	e.GET("/hello", hello)
-	e.POST("/user", user)
+	e.GET("/healthcheck", healthcheck)
+	e.POST("/trace", trace)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":1234"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
 
-// Hello
-// @Summary Returns Hello, World!
-// @Description Returns Hello, World!
-// @ID hello
-// @Success 200 {string} string	"ok"
-// @Router /hello [get]
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+// Healthcheck
+// @Summary Returns Healthy
+// @Description Returns Healthy
+// @ID healthcheck
+// @Success 200 {string} string	"Healthy"
+// @Router /healthcheck [get]
+func healthcheck(c echo.Context) error {
+	return c.String(http.StatusOK, "Healthy")
 }
 
-// user
-// @Summary Add a new User
-// @Description Adds a new user to the list of Users
-// @ID add-user
+// OF Trace
+// @Summary Send trace request to OpenFisca
+// @ID of-trace
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"Returns new user"
-// @Router /user [post]
-func user(c echo.Context) error {
-	// Create a new user
-	u := new(User)
-	// Bind the request body to the new user
-	if err := c.Bind(u); err != nil {
-		return err
+// @Success 200 {string} string	"Returns OpenFisca trace response"
+// @Router /trace [post]
+func trace(c echo.Context) (err error) {
+
+	data := c.Request().Body
+
+	body, err := ioutil.ReadAll(data)
+	if err != nil {
+		fmt.Printf("Error reading body: %v", err)
+		return
 	}
 
-	u.UserID = incUserCount()
+	result, err := openfisca.Trace(body)
+	if err != nil {
+		fmt.Printf("Error reading body: %v", err)
+		return
+	}
 
-	//TODO: Do something with new User
-
-	// Return new user
-	return c.JSON(http.StatusOK, u)
+	return c.JSON(http.StatusOK, result)
 }
