@@ -1,0 +1,46 @@
+# Default values for question priority service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+
+qpsPort:
+  enabled: true
+  name: http
+  port: 8080
+  protocol: TCP
+
+image:
+  repository: mtscontainers.azurecr.io/question-priority-service
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+livenessProbe:
+  enabled: false
+  delay: 30
+  path: /healthcheck
+
+readinessProbe:
+  enabled: false
+  delay: 30
+  path: /healthcheck
+
+# replicaCount: 1
+
+nameOverride: ""
+fullnameOverride: ""
+

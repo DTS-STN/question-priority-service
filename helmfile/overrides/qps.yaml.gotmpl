@@ -1,0 +1,28 @@
+image:
+  repository: mtscontainers.azurecr.io/question-priority-service
+{{ if or (eq .Environment.Name "prod-blue") (eq .Environment.Name "prod-green") (eq .Environment.Name "dev") }}
+  tag: "{{ requiredEnv "DOCKER_TAG" }}" 
+{{ else }}
+  tag: latest
+{{ end }}
+  pullPolicy: Always
+ingress:
+      enabled: true
+      hosts:
+      {{ if or (eq .Environment.Name "prod-blue") (eq .Environment.Name "prod-green") }}
+        - qps.{{ requiredEnv "BASE_DOMAIN" }}
+        - qps.{{ .Environment.Name }}.{{ requiredEnv "BASE_DOMAIN" }}
+      {{ else }}      
+        - qps-{{ .Environment.Name }}.{{ requiredEnv "BASE_DOMAIN_DEV" }}
+      {{ end }}
+      annotations: {}
+      # kubernetes.io/ingress.class: traefik
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+livenessDelay: 60
+readinessDelay: 60
+livenessPath: /
+readinessPath: /
+port: 80

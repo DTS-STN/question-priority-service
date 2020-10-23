@@ -1,0 +1,13 @@
+name: question-priority-service
+home: https://github.com/DTS-STN/question-priority-service
+apiVersion: v1
+version: 0.0.1
+appVersion: 0.0.1
+description: Prototype C19 Benefits finder question priority service
+maintainers:
+  - name: ericdube
+    email: eric.dube@hrsdc-rhdcc.gc.ca
+  - name: benlarabie
+    email: ben.larabie@hrsdc-rhdcc.gc.ca
+  - name: marcusblais
+    email: marcus.blais@hrsdc-rhdcc.gc.ca

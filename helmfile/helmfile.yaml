@@ -1,0 +1,29 @@
+repositories:
+    - name: dts
+      url: https://helm.dts-stn.com
+{{- if or (eq .Environment.Name "prod-blue") (eq .Environment.Name "prod-green") }}    
+context: EsDCDTSRG-K8S
+{{ else }}
+context: EsDCDTSDevRG-K8S
+{{ end }}
+   
+environments:
+    dev:
+    prod-blue:
+    prod-green: 
+
+releases:
+# Question Priority Service
+  - name: qps-{{ .Environment.Name }}
+    chart: ../helm/charts/question-priority-service
+    version: 0.0.1
+    values:
+      - overrides/qps.yaml.gotmpl
+    labels:
+        category: dts
+        app: qps
+        tier: server
+    namespace: qps-{{ .Environment.Name }}
+    installed: true
+    wait: false
+    force: false
