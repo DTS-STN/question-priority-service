@@ -30,7 +30,7 @@ tolerations: []
 affinity: {}
 
 livenessProbe:
-  enabled: true
+  enabled: false
   delay: 30
   path: /healthcheck
 
