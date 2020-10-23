@@ -7,6 +7,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	
+	"fmt"
+	"io/ioutil"
+	"log"
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"sync/atomic"
 )
@@ -17,12 +22,6 @@ import (
 
 // @host localhost:1234
 // @BasePath /
-
-// User struct
-type User struct {
-	Name string `json:"name"`
-	UserID int64 `json:"userID"`
-}
 
 // Declare a local userCount
 var userCount int64
@@ -45,6 +44,12 @@ func main() {
 	//Declare new custom logger
 	logTest := utils.NewLogger()
 
+	//CORS
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
+	}))
+
 	// Middleware
 	e.Use(logTest.Process)
 	e.Use(middleware.Recover())
@@ -52,7 +57,7 @@ func main() {
 
 	// Routes
 	e.GET("/hello", hello)
-	e.POST("/user", user)
+	e.POST("/trace", trace)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":1234"))
@@ -68,26 +73,50 @@ func hello(c echo.Context) error {
 	return c.String(http.StatusOK, "Hello, World!")
 }
 
-// user
-// @Summary Add a new User
-// @Description Adds a new user to the list of Users
-// @ID add-user
+// OF Trace
+// @Summary Send trace request to OpenFisca
+// @ID of-trace
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"Returns new user"
-// @Router /user [post]
-func user(c echo.Context) error {
-	// Create a new user
-	u := new(User)
-	// Bind the request body to the new user
-	if err := c.Bind(u); err != nil {
-		return err
+// @Success 200 {string} string	"Returns OpenFisca trace response"
+// @Router /trace [post]
+func trace(c echo.Context) (err error) {
+
+	data := c.Request().Body
+
+	body, err := ioutil.ReadAll(data)
+	if err != nil {
+		log.Printf("Error reading body: %v", err)
+		// http.Error("can't read body", http.StatusBadRequest)
+		return
 	}
 
-	u.UserID = incUserCount()
+	req, err := http.NewRequest("POST", "http://localhost:5000/trace", bytes.NewBuffer(body))
+	if err != nil {
+		fmt.Println("Error in req: ", err)
+	}
+	req.Header.Add("Content-Type", "application/json")
 
-	//TODO: Do something with new User
+	// Create a Client
+	client := &http.Client{}
 
-	// Return new user
-	return c.JSON(http.StatusOK, u)
+	// Do sends an HTTP request and
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("error in request: ", err)
+	}
+
+	// Defer the closing of the body
+	defer resp.Body.Close()
+
+	body, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		//log.Printf("Error reading body: %v", err)
+		//http.Error(w, "can't read body", http.StatusBadRequest)
+		return
+	}
+
+	json := json.RawMessage(body)
+
+	return c.JSON(http.StatusOK, json)
 }
