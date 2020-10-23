@@ -6,17 +6,14 @@ image:
   tag: latest
 {{ end }}
   pullPolicy: Always
-extraEnv:
-  - name: EMPTY
-    value: EMPTY
 ingress:
       enabled: true
       hosts:
       {{ if or (eq .Environment.Name "prod-blue") (eq .Environment.Name "prod-green") }}
-        - home.{{ requiredEnv "BASE_DOMAIN" }}
-        - home.{{ .Environment.Name }}.{{ requiredEnv "BASE_DOMAIN" }}
+        - qps.{{ requiredEnv "BASE_DOMAIN" }}
+        - qps.{{ .Environment.Name }}.{{ requiredEnv "BASE_DOMAIN" }}
       {{ else }}      
-        - home-{{ .Environment.Name }}.{{ requiredEnv "BASE_DOMAIN_DEV" }}
+        - qps-{{ .Environment.Name }}.{{ requiredEnv "BASE_DOMAIN_DEV" }}
       {{ end }}
       annotations: {}
       # kubernetes.io/ingress.class: traefik
