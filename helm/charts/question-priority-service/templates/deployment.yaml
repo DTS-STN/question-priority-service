@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "fullName" . }}
+  name: {{ include "fullname" . }}
   labels:
     app.kubernetes.io/name: {{ include "name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -30,24 +30,24 @@ spec:
 {{- if .Values.extraEnv }}
 {{ toYaml .Values.extraEnv | indent 10 }}
 {{ end }}
-{{ if .Values.port.enabled }}
+{{ if .Values.qpsPort.enabled }}
           ports:
-            - name: {{ .Values.port.name }}
-              containerPort: {{ .Values.port.port }}
-              protocol: {{ .Values.port.protocol }}
+            - name: {{ .Values.qpsPort.name }}
+              containerPort: {{ .Values.qpsPort.port }}
+              protocol: {{ .Values.qpsPort.protocol }}
 {{ end }}
 {{ if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.url }}
-              port: {{ .Values.port.name }}
+              port: {{ .Values.qpsPort.name }}
             initialDelaySeconds: {{ .Values.livenessProbe.delay }}
 {{ end }}
 {{ if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.url }}
-              port: {{ .Values.port.name }}
+              port: {{ .Values.qpsPort.name }}
             initialDelaySeconds: {{ .Values.readinessProbe.delay }}
 {{ end }}
           resources:

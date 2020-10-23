@@ -1,9 +1,6 @@
 repositories:
     - name: dts
       url: https://helm.dts-stn.com
-    # helm-git powered repository: You can treat any Git repository as a charts repository
-    - name: qps
-      url: git+https://{{ requiredEnv "GITHUB_USER" }}:{{ requiredEnv "GITHUB_TOKEN" }}@github.com/DTS-STN/question-priority-service@helm/charts?ref=development
 {{- if or (eq .Environment.Name "prod-blue") (eq .Environment.Name "prod-green") }}    
 context: EsDCDTSRG-K8S
 {{ else }}
@@ -18,7 +15,7 @@ environments:
 releases:
 # Question Priority Service
   - name: qps-{{ .Environment.Name }}
-    chart: qps/question-priority-service
+    chart: ../helm/charts/question-priority-service
     version: 0.0.1
     values:
       - overrides/qps.yaml.gotmpl
