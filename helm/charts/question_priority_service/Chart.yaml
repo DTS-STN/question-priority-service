@@ -1,4 +1,4 @@
-name: dts-question-priority-service
+name: question-priority-service
 home: https://github.com/DTS-STN/question-priority-service
 apiVersion: v1
 version: 0.0.1
