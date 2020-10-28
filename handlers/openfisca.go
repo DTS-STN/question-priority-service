@@ -12,25 +12,26 @@ import (
 )
 
 type OpenFiscaInterface interface {
-	sendRequest(*bindings.TraceRequest) (renderings.TraceResponse, error)
+	sendRequest(request *bindings.NextQuestionRequest) (renderings.NextQuestionResponse, error)
 }
 
 type OpenFisca struct {}
 var openFisca OpenFiscaInterface
 
-// OF Trace
-// @Summary Send trace request to OpenFisca
-// @ID of-trace
+// NextQuestion
+// @Summary Request Prioritized Questions
+// @ID next-question
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"Returns OpenFisca trace response"
-// @Router /trace [post]
-func Trace(c echo.Context) (err error) {
-	resp := renderings.TraceResponse{}
-	traceRequest := new(bindings.TraceRequest)
+// @Success 200 {object} renderings.NextQuestionResponse
+// @Param NextQuestion body bindings.NextQuestionRequest true "value"
+// @Router /next [post]
+func NextQuestion(c echo.Context) (err error) {
+	resp := renderings.NextQuestionResponse{}
+	NextQuestionRequest := new(bindings.NextQuestionRequest)
 
 	// Bind the request into our request struct
-	if err := c.Bind(traceRequest); err != nil {
+	if err := c.Bind(NextQuestionRequest); err != nil {
 		c.Logger().Error(err)
 		resp.Success = false
 		resp.Message = "Bad Data"
@@ -38,7 +39,7 @@ func Trace(c echo.Context) (err error) {
 	}
 
 	// Call the open fisca server
-	resp, err = openFisca.sendRequest(traceRequest)
+	resp, err = openFisca.sendRequest(NextQuestionRequest)
 	if err != nil {
 		c.Logger().Error(err)
 		resp.Success = false
@@ -51,23 +52,23 @@ func Trace(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, resp)
 }
 
-func (of OpenFisca) sendRequest(traceRequest *bindings.TraceRequest) (renderings.TraceResponse, error) {
+func (of OpenFisca) sendRequest(NextQuestionRequest *bindings.NextQuestionRequest) (renderings.NextQuestionResponse, error) {
 
-	//Modify TraceRequest if necessary
-	requestBody, err := json.Marshal(traceRequest)
+	//Modify NextQuestionRequest if necessary
+	requestBody, err := json.Marshal(NextQuestionRequest)
 	if err != nil {
-		return renderings.TraceResponse{}, err
+		return renderings.NextQuestionResponse{}, err
 	}
 
 	//TODO: Put url in a config
 	resp, err := http.Post("https://fd7a43f1-b30f-4895-836d-5b52cede5318.mock.pstmn.io/trace","application/json",  bytes.NewBuffer(requestBody))
 	if err != nil {
-		return renderings.TraceResponse{}, err
+		return renderings.NextQuestionResponse{}, err
 	}
 
 	// Defer the closing of the body
 	defer resp.Body.Close()
-	temp := &renderings.TraceResponse{}
+	temp := &renderings.NextQuestionResponse{}
 	err = json.NewDecoder(resp.Body).Decode(temp)
 
 	return *temp, err

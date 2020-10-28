@@ -1,5 +1,5 @@
 package bindings
 
-type TraceRequest struct {
+type NextQuestionRequest struct {
 	Key string
 }

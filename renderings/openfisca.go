@@ -1,6 +1,6 @@
 package renderings
 
-type TraceResponse struct {
+type NextQuestionResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Key string `json:"key"`

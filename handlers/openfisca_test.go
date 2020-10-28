@@ -13,11 +13,6 @@ import (
 	"strings"
 )
 
-var (
-	postJSON = `{"key":"value"}`
-	expectedResult = `{"success":true,"message":"","key":"value"}`
-)
-
 type openFiscaMock struct {
 	mock.Mock
 }
@@ -27,7 +22,9 @@ func (m *openFiscaMock) sendRequest(traceRequest *bindings.TraceRequest) (render
 	return args.Get(0).(renderings.TraceResponse), args.Error(1)
 }
 
-func TestTrace(t *testing.T) {
+func TestNextQuestion(t *testing.T) {
+	const postJSON = `{"key":"value"}`
+
 	// Setup Echo service
 	e := echo.New()
 	// Setup http request using httptest
@@ -50,10 +47,21 @@ func TestTrace(t *testing.T) {
 	// Set the mock to be used by the code
 	openFisca = OpenFiscaInterface(of)
 
+	const expectedResult = `{"success":true,"message":"","key":"value"}`
+	// Assertions
+	if assert.NoError(t, NextQuestion(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		// Here we need to trim new lines since we are parsing a body that could contain them
+		assert.Equal(t, expectedResult, strings.TrimSuffix(rec.Body.String(), "\n"))
+	}
+}
+
+/*func TestSendRequest(t *testing.T) {
+	OpenFisca.sendRequest(bindings.TraceRequest{})
 	// Assertions
 	if assert.NoError(t, Trace(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		// Here we need to trim new lines since we are parsing a body that could contain them
 		assert.Equal(t, expectedResult, strings.TrimSuffix(rec.Body.String(), "\n"))
 	}
-}
+}*/

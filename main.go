@@ -10,9 +10,9 @@ import (
 
 )
 
-// @title Simple Echo Test
+// @title Question Prioritization Service
 // @version 1.0
-// @description This is a simple test of the Echo framework.
+// @description This is a service to return questions that when answered will return elegible benefits.
 
 // @host localhost:8080
 // @BasePath /
@@ -29,7 +29,7 @@ func main() {
 	// Routes
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.GET("/healthcheck", handlers.HealthCheck)
-	e.POST("/trace", handlers.Trace)
+	e.POST("/next", handlers.NextQuestion)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
