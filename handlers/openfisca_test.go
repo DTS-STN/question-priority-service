@@ -11,8 +11,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
-
-	"fmt"
 )
 
 var (
@@ -30,26 +28,32 @@ func (m *openFiscaMock) sendRequest(traceRequest *bindings.TraceRequest) (render
 }
 
 func TestTrace(t *testing.T) {
-	// Setup
+	// Setup Echo service
 	e := echo.New()
+	// Setup http request using httptest
 	req := httptest.NewRequest(http.MethodPost, "/trace", strings.NewReader(postJSON))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	// Create a httptest record
 	rec := httptest.NewRecorder()
+	// Create a new Echo Context
 	c := e.NewContext(req, rec)
-	of := new(openFiscaMock)
 
+	// Create the Request and Response for the Mock
 	sendRequestData := &bindings.TraceRequest{Key: "value"}
 	sendRequestResult := renderings.TraceResponse{Key: "value"}
 
+	// Create a Mock for the interface
+	of := new(openFiscaMock)
+	// Add a mock call request
 	of.On("sendRequest", sendRequestData).
 		Return(sendRequestResult, nil)
-
+	// Set the mock to be used by the code
 	openFisca = OpenFiscaInterface(of)
 
 	// Assertions
 	if assert.NoError(t, Trace(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		fmt.Print(rec.Body.String())
-		assert.Equal(t, expectedResult, rec.Body.String())
+		// Here we need to trim new lines since we are parsing a body that could contain them
+		assert.Equal(t, expectedResult, strings.TrimSuffix(rec.Body.String(), "\n"))
 	}
 }
