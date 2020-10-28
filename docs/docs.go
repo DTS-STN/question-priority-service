@@ -52,7 +52,7 @@ var doc = `{
                 "parameters": [
                     {
                         "description": "value",
-                        "name": "Key",
+                        "name": "NextQuestion",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -63,6 +63,24 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/renderings.NextQuestionResponse"
                         }

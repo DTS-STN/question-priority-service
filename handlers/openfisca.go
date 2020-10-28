@@ -24,6 +24,9 @@ var openFisca OpenFiscaInterface
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} renderings.NextQuestionResponse
+// @Failure 400 {object} renderings.NextQuestionResponse
+// @Failure 404 {object} renderings.NextQuestionResponse
+// @Failure 500 {object} renderings.NextQuestionResponse
 // @Param NextQuestion body bindings.NextQuestionRequest true "value"
 // @Router /next [post]
 func NextQuestion(c echo.Context) (err error) {

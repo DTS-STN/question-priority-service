@@ -40,7 +40,7 @@ paths:
       parameters:
       - description: value
         in: body
-        name: Key
+        name: NextQuestion
         required: true
         schema:
           $ref: '#/definitions/bindings.NextQuestionRequest'
@@ -49,6 +49,18 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/renderings.NextQuestionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/renderings.NextQuestionResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/renderings.NextQuestionResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/renderings.NextQuestionResponse'
       summary: Request Prioritized Questions
