@@ -17,9 +17,9 @@ type openFiscaMock struct {
 	mock.Mock
 }
 
-func (m *openFiscaMock) sendRequest(traceRequest *bindings.TraceRequest) (renderings.TraceResponse, error) {
+func (m *openFiscaMock) sendRequest(traceRequest *bindings.NextQuestionRequest) (renderings.NextQuestionResponse, error) {
 	args := m.Called(traceRequest)
-	return args.Get(0).(renderings.TraceResponse), args.Error(1)
+	return args.Get(0).(renderings.NextQuestionResponse), args.Error(1)
 }
 
 func TestNextQuestion(t *testing.T) {
@@ -36,8 +36,8 @@ func TestNextQuestion(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Create the Request and Response for the Mock
-	sendRequestData := &bindings.TraceRequest{Key: "value"}
-	sendRequestResult := renderings.TraceResponse{Key: "value"}
+	sendRequestData := &bindings.NextQuestionRequest{Key: "value"}
+	sendRequestResult := renderings.NextQuestionResponse{Key: "value"}
 
 	// Create a Mock for the interface
 	of := new(openFiscaMock)
