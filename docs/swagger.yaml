@@ -1,33 +1,67 @@
 basePath: /
-host: localhost:1234
+definitions:
+  bindings.NextQuestionRequest:
+    properties:
+      key:
+        type: string
+    type: object
+  renderings.NextQuestionResponse:
+    properties:
+      key:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
 info:
   contact: {}
-  description: This is a simple test of the Echo framework.
-  title: Simple Echo Test
+  description: This is a service to return questions that when answered will return
+    elegible benefits.
+  title: Question Prioritization Service
   version: "1.0"
 paths:
-  /hello:
+  /healthcheck:
     get:
-      description: Returns Hello, World!
-      operationId: hello
+      description: Returns Healthy
+      operationId: healthcheck
       responses:
         "200":
-          description: ok
+          description: Healthy
           schema:
             type: string
-      summary: Returns Hello, World!
-  /user:
+      summary: Returns Healthy
+  /next:
     post:
       consumes:
       - application/json
-      description: Adds a new user to the list of Users
-      operationId: add-user
+      operationId: next-question
+      parameters:
+      - description: value
+        in: body
+        name: NextQuestion
+        required: true
+        schema:
+          $ref: '#/definitions/bindings.NextQuestionRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: Returns new user
+          description: OK
           schema:
-            type: string
-      summary: Add a new User
+            $ref: '#/definitions/renderings.NextQuestionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/renderings.NextQuestionResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/renderings.NextQuestionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/renderings.NextQuestionResponse'
+      summary: Request Prioritized Questions
 swagger: "2.0"

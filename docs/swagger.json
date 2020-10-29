@@ -1,22 +1,22 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a simple test of the Echo framework.",
-        "title": "Simple Echo Test",
+        "description": "This is a service to return questions that when answered will return elegible benefits.",
+        "title": "Question Prioritization Service",
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:1234",
+    "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/hello": {
+        "/healthcheck": {
             "get": {
-                "description": "Returns Hello, World!",
-                "summary": "Returns Hello, World!",
-                "operationId": "hello",
+                "description": "Returns Healthy",
+                "summary": "Returns Healthy",
+                "operationId": "healthcheck",
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "Healthy",
                         "schema": {
                             "type": "string"
                         }
@@ -24,24 +24,76 @@
                 }
             }
         },
-        "/user": {
+        "/next": {
             "post": {
-                "description": "Adds a new user to the list of Users",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Add a new User",
-                "operationId": "add-user",
-                "responses": {
-                    "200": {
-                        "description": "Returns new user",
+                "summary": "Request Prioritized Questions",
+                "operationId": "next-question",
+                "parameters": [
+                    {
+                        "description": "value",
+                        "name": "NextQuestion",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/bindings.NextQuestionRequest"
                         }
                     }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "bindings.NextQuestionRequest": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "renderings.NextQuestionResponse": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
                 }
             }
         }

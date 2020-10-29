@@ -24,14 +24,14 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/hello": {
+        "/healthcheck": {
             "get": {
-                "description": "Returns Hello, World!",
-                "summary": "Returns Hello, World!",
-                "operationId": "hello",
+                "description": "Returns Healthy",
+                "summary": "Returns Healthy",
+                "operationId": "healthcheck",
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "Healthy",
                         "schema": {
                             "type": "string"
                         }
@@ -39,24 +39,76 @@ var doc = `{
                 }
             }
         },
-        "/user": {
+        "/next": {
             "post": {
-                "description": "Adds a new user to the list of Users",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Add a new User",
-                "operationId": "add-user",
-                "responses": {
-                    "200": {
-                        "description": "Returns new user",
+                "summary": "Request Prioritized Questions",
+                "operationId": "next-question",
+                "parameters": [
+                    {
+                        "description": "value",
+                        "name": "NextQuestion",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/bindings.NextQuestionRequest"
                         }
                     }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "bindings.NextQuestionRequest": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                }
+            }
+        },
+        "renderings.NextQuestionResponse": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
                 }
             }
         }
@@ -75,11 +127,11 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "localhost:1234",
+	Host:        "localhost:8080",
 	BasePath:    "/",
 	Schemes:     []string{},
-	Title:       "Simple Echo Test",
-	Description: "This is a simple test of the Echo framework.",
+	Title:       "Question Prioritization Service",
+	Description: "This is a service to return questions that when answered will return elegible benefits.",
 }
 
 type s struct{}
