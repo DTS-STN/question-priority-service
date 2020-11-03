@@ -11,6 +11,12 @@ import (
 func Main(args []string){
 	// Echo instance
 	e := echo.New()
+	service(e)
+}
+
+var handler handlers.HandlerServiceInterface
+
+func service(e *echo.Echo){
 	e.Logger.SetLevel(log.DEBUG)
 
 	// Middleware
@@ -18,8 +24,8 @@ func Main(args []string){
 
 	// Routes
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
-	e.GET("/healthcheck", handlers.HealthCheck)
-	e.POST("/next", handlers.NextQuestion)
+	e.GET("/healthcheck", handler.HealthCheck)
+	e.POST("/next", handler.NextQuestion)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
