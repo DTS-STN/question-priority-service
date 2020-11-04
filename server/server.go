@@ -8,25 +8,25 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
+var echoService *echo.Echo
+
 func Main(args []string){
 	// Echo instance
-	e := echo.New()
-	service(e)
+	echoService = echo.New()
+	service()
 }
 
-var handler handlers.HandlerServiceInterface
-
-func service(e *echo.Echo){
-	e.Logger.SetLevel(log.DEBUG)
+func service(){
+	echoService.Logger.SetLevel(log.DEBUG)
 
 	// Middleware
-	e.Use(middleware.Recover())
+	echoService.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
-	e.GET("/healthcheck", handler.HealthCheck)
-	e.POST("/next", handler.NextQuestion)
+	echoService.GET("/swagger/*", echoSwagger.WrapHandler)
+	echoService.GET("/healthcheck", handlers.HandlerService.HealthCheck)
+	echoService.POST("/next", handlers.HandlerService.NextQuestion)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	echoService.Logger.Fatal(echoService.Start(":8080"))
 }

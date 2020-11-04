@@ -50,7 +50,7 @@ func TestNextQuestion(t *testing.T) {
 
 	const expectedResult = `{"success":true,"message":"","key":"value"}`
 	// Assertions
-	if assert.NoError(t, NextQuestion(c)) {
+	if assert.NoError(t, HandlerService.NextQuestion(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		// Here we need to trim new lines since we are parsing a body that could contain them
 		assert.Equal(t, expectedResult, strings.TrimSuffix(rec.Body.String(), "\n"))

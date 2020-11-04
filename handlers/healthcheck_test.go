@@ -20,7 +20,7 @@ func TestHealthCheck(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Assertions
-	if assert.NoError(t, HealthCheck(c)) {
+	if assert.NoError(t, HandlerService.HealthCheck(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
 }

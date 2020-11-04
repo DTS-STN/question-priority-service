@@ -8,5 +8,6 @@ type HandlerServiceInterface interface {
 }
 
 type Handler struct {
-
 }
+
+var HandlerService HandlerServiceInterface = new(Handler)

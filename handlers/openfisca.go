@@ -19,7 +19,7 @@ import (
 // @Failure 500 {object} renderings.NextQuestionResponse
 // @Param NextQuestion body bindings.NextQuestionRequest true "value"
 // @Router /next [post]
-func NextQuestion(c echo.Context) (err error) {
+func (h *Handler) NextQuestion(c echo.Context) (err error) {
 	resp := renderings.NextQuestionResponse{}
 	NextQuestionRequest := new(bindings.NextQuestionRequest)
 

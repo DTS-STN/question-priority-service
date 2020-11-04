@@ -33,6 +33,8 @@ func TestServer(t *testing.T) {
 	handlerMock.On("NextQuestion", e).
 		Return(nil)
 	// Set the mock to be used by the code
-	handler = handlers.HandlerServiceInterface(handlerMock)
+	handlers.HandlerService = handlers.HandlerServiceInterface(handlerMock)
+
+	// TODO: Add Tests
 
 }
