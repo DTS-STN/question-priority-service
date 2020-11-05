@@ -14,10 +14,10 @@ import (
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} renderings.NextQuestionResponse
-// @Failure 400 {object} renderings.NextQuestionResponse
-// @Failure 404 {object} renderings.NextQuestionResponse
-// @Failure 500 {object} renderings.NextQuestionResponse
-// @Param NextQuestion body bindings.NextQuestionRequest true "value"
+// @Failure 400 {object} renderings.QPSError
+// @Failure 404 {object} renderings.QPSError
+// @Failure 500 {object} renderings.QPSError
+// @Param NextQuestion body bindings.NextQuestionRequest 1604599804740 "Journey 1" ["Benefit 1"] [models.Question] [models.Benefit]
 // @Router /next [post]
 func (h *Handler) NextQuestion(c echo.Context) (err error) {
 	resp := renderings.NextQuestionResponse{}
