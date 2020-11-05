@@ -7,15 +7,15 @@ definitions:
         items:
           type: string
         type: array
-      client_response:
-        description: List of answered priority questions
-        items:
-          $ref: '#/definitions/models.Question'
-        type: array
       life_journeys:
         description: Array of life journeys, which represent a subset of benefits
         items:
           type: string
+        type: array
+      question_list:
+        description: List of answered priority questions
+        items:
+          $ref: '#/definitions/models.Question'
         type: array
       request_date:
         description: Date period for request in ms since epoch
@@ -44,22 +44,12 @@ definitions:
         items:
           $ref: '#/definitions/models.Benefit'
         type: array
-      benefit_list:
-        description: Array of specific benefits to get the questions for
-        items:
-          type: string
-        type: array
-      client_response:
+      question_list:
         description: |-
           List of answered priority questions with their answers and the next priority
           question with a value of null
         items:
           $ref: '#/definitions/models.Question'
-        type: array
-      life_journeys:
-        description: Array of life journeys, which represent a subset of benefits
-        items:
-          type: string
         type: array
       request_date:
         description: Date period for request in ms since epoch

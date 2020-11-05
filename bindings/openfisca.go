@@ -12,5 +12,5 @@ type NextQuestionRequest struct {
 	// Array of specific benefits to get the questions for
 	BenefitList []string `json:"benefit_list"`
 	// List of answered priority questions
-	QuestionList []models.Question `json:"client_response"`
+	QuestionList []models.Question `json:"question_list"`
 }

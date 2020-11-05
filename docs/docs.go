@@ -99,18 +99,18 @@ var doc = `{
                         "type": "string"
                     }
                 },
-                "client_response": {
-                    "description": "List of answered priority questions",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Question"
-                    }
-                },
                 "life_journeys": {
                     "description": "Array of life journeys, which represent a subset of benefits",
                     "type": "array",
                     "items": {
                         "type": "string"
+                    }
+                },
+                "question_list": {
+                    "description": "List of answered priority questions",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Question"
                     }
                 },
                 "request_date": {
@@ -151,25 +151,11 @@ var doc = `{
                         "$ref": "#/definitions/models.Benefit"
                     }
                 },
-                "benefit_list": {
-                    "description": "Array of specific benefits to get the questions for",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "client_response": {
+                "question_list": {
                     "description": "List of answered priority questions with their answers and the next priority\nquestion with a value of null",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Question"
-                    }
-                },
-                "life_journeys": {
-                    "description": "Array of life journeys, which represent a subset of benefits",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
                     }
                 },
                 "request_date": {
