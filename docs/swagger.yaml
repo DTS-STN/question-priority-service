@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  benefits.Benefit:
+    properties:
+      eligible:
+        type: boolean
+      id:
+        type: string
+    type: object
   bindings.NextQuestionRequest:
     properties:
       benefit_list:
@@ -21,13 +28,6 @@ definitions:
         description: Date period for request in ms since epoch
         type: integer
     type: object
-  models.Benefit:
-    properties:
-      id:
-        type: string
-      is_eligible:
-        type: boolean
-    type: object
   models.Question:
     properties:
       answer:
@@ -42,7 +42,7 @@ definitions:
           List of eligible and non-eligible benefits, populated as responses to
           prioritized questions are received
         items:
-          $ref: '#/definitions/models.Benefit'
+          $ref: '#/definitions/benefits.Benefit'
         type: array
       question_list:
         description: |-
