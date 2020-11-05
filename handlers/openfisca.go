@@ -7,15 +7,16 @@ import (
 	"github.com/labstack/echo/v4"
 	"gopkg.in/square/go-jose.v2/json"
 
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
 type OpenFiscaInterface interface {
 	sendRequest(request *bindings.NextQuestionRequest) (renderings.NextQuestionResponse, error)
 }
 
-type OpenFisca struct {}
+type OpenFisca struct{}
+
 var openFisca OpenFiscaInterface
 
 // NextQuestion
@@ -36,8 +37,6 @@ func NextQuestion(c echo.Context) (err error) {
 	// Bind the request into our request struct
 	if err := c.Bind(NextQuestionRequest); err != nil {
 		c.Logger().Error(err)
-		resp.Success = false
-		resp.Message = "Bad Data"
 		return c.JSON(http.StatusBadRequest, resp)
 	}
 
@@ -45,12 +44,9 @@ func NextQuestion(c echo.Context) (err error) {
 	resp, err = openFisca.sendRequest(NextQuestionRequest)
 	if err != nil {
 		c.Logger().Error(err)
-		resp.Success = false
-		resp.Message = "Can not call OF"
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
 
-	resp.Success = true
 	fmt.Print(resp)
 	return c.JSON(http.StatusOK, resp)
 }
@@ -64,7 +60,7 @@ func (of OpenFisca) sendRequest(NextQuestionRequest *bindings.NextQuestionReques
 	}
 
 	//TODO: Put url in a config
-	resp, err := http.Post("https://fd7a43f1-b30f-4895-836d-5b52cede5318.mock.pstmn.io/trace","application/json",  bytes.NewBuffer(requestBody))
+	resp, err := http.Post("https://fd7a43f1-b30f-4895-836d-5b52cede5318.mock.pstmn.io/trace", "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return renderings.NextQuestionResponse{}, err
 	}
