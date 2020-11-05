@@ -11,6 +11,6 @@ import (
 // @ID healthcheck
 // @Success 200 {string} string	"Healthy"
 // @Router /healthcheck [get]
-func HealthCheck(c echo.Context) error {
+func (h *Handler) HealthCheck(c echo.Context) error {
 	return c.String(http.StatusOK, "Healthy")
 }
