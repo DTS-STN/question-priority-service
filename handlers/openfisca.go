@@ -36,6 +36,5 @@ func (h *Handler) NextQuestion(c echo.Context) (err error) {
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
 
-	resp.Success = true
 	return c.JSON(http.StatusOK, resp)
 }
