@@ -26,8 +26,6 @@ func (h *Handler) NextQuestion(c echo.Context) (err error) {
 	// Bind the request into our request struct
 	if err := c.Bind(NextQuestionRequest); err != nil {
 		c.Logger().Error(err)
-		resp.Success = false
-		resp.Message = "Bad Data"
 		return c.JSON(http.StatusBadRequest, resp)
 	}
 
@@ -35,8 +33,6 @@ func (h *Handler) NextQuestion(c echo.Context) (err error) {
 	resp, err = openfisca.Service.SendRequest(NextQuestionRequest)
 	if err != nil {
 		c.Logger().Error(err)
-		resp.Success = false
-		resp.Message = "Can not call OF"
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
 

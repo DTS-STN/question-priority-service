@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/DTS-STN/question-priority-service/bindings"
+	"github.com/DTS-STN/question-priority-service/models"
 	"github.com/DTS-STN/question-priority-service/renderings"
 	"github.com/DTS-STN/question-priority-service/src/openfisca"
 	"github.com/labstack/echo/v4"
@@ -37,8 +38,20 @@ func TestNextQuestion(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	// Create the Request and Response for the Mock
-	sendRequestData := &bindings.NextQuestionRequest{Key: "value"}
-	sendRequestResult := renderings.NextQuestionResponse{Key: "value"}
+	sendRequestData := &bindings.NextQuestionRequest{}
+	sendRequestResult := renderings.NextQuestionResponse{
+		RequestDate:  100,
+		LifeJourneys: []string{"Journey1", "Journey2"},
+		BenefitList:  []string{"Benefit1", "Benefit2"},
+		QuestionList: []models.Question{
+			{"ID1", "Answer1"},
+			{"ID2", "Answer2"},
+		},
+		BenefitEligibility: []models.Benefit{
+			{ID: "Benefit1", IsEligible: true},
+			{ID: "Benefit2", IsEligible: false},
+		},
+	}
 
 	// Create a Mock for the interface
 	of := new(openFiscaMock)
@@ -48,7 +61,7 @@ func TestNextQuestion(t *testing.T) {
 	// Set the mock to be used by the code
 	openfisca.Service = openfisca.OFInterface(of)
 
-	const expectedResult = `{"success":true,"message":"","key":"value"}`
+	const expectedResult = `{"request_date":100,"life_journeys":["Journey1","Journey2"],"benefit_list":["Benefit1","Benefit2"],"client_response":[{"id":"ID1","Answer":"Answer1"},{"id":"ID2","Answer":"Answer2"}],"benefit_eligibility":[{"id":"Benefit1","is_eligible":true},{"id":"Benefit2","is_eligible":false}]}`
 	// Assertions
 	if assert.NoError(t, HandlerService.NextQuestion(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
