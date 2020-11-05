@@ -9,13 +9,9 @@ import "github.com/DTS-STN/question-priority-service/models"
 type NextQuestionResponse struct {
 	// Date period for request in ms since epoch
 	RequestDate int64 `json:"request_date"`
-	// Array of life journeys, which represent a subset of benefits
-	LifeJourneys []string `json:"life_journeys"`
-	// Array of specific benefits to get the questions for
-	BenefitList []string `json:"benefit_list"`
 	// List of answered priority questions with their answers and the next priority
 	// question with a value of null
-	QuestionList []models.Question `json:"client_response"`
+	QuestionList []models.Question `json:"question_list"`
 	// List of eligible and non-eligible benefits, populated as responses to
 	// prioritized questions are received
 	BenefitEligibility []models.Benefit `json:"benefit_eligibility"`
