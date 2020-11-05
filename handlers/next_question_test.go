@@ -4,6 +4,7 @@ import (
 	"github.com/DTS-STN/question-priority-service/bindings"
 	"github.com/DTS-STN/question-priority-service/models"
 	"github.com/DTS-STN/question-priority-service/renderings"
+	"github.com/DTS-STN/question-priority-service/src/benefits"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/square/go-jose.v2/json"
@@ -34,10 +35,7 @@ func TestNextQuestion_NoQuestions(t *testing.T) {
 		QuestionList: []models.Question{
 			{"1", ""},
 		},
-		BenefitEligibility: []models.Benefit{
-			{ID: "1", IsEligible: false},
-			{ID: "2", IsEligible: false},
-		},
+		BenefitEligibility: []benefits.Benefit{{ID: "1", Eligible: false}, {ID: "2", Eligible: false}},
 	}
 
 	expectedResult, err := json.Marshal(sendRequestResult)
@@ -86,9 +84,9 @@ func TestNextQuestion_QuestionOneFalse(t *testing.T) {
 			{"1", "false"},
 			{"2", ""},
 		},
-		BenefitEligibility: []models.Benefit{
-			{ID: "1", IsEligible: false},
-			{ID: "2", IsEligible: false},
+		BenefitEligibility: []benefits.Benefit{
+			{ID: "1", Eligible: false},
+			{ID: "2", Eligible: false},
 		},
 	}
 
@@ -138,9 +136,9 @@ func TestNextQuestion_QuestionOneTrue(t *testing.T) {
 			{"1", "true"},
 			{"2", ""},
 		},
-		BenefitEligibility: []models.Benefit{
-			{ID: "1", IsEligible: true},
-			{ID: "2", IsEligible: false},
+		BenefitEligibility: []benefits.Benefit{
+			{ID: "1", Eligible: true},
+			{ID: "2", Eligible: false},
 		},
 	}
 
@@ -191,9 +189,9 @@ func TestNextQuestion_TwoQuestionsFalse(t *testing.T) {
 			{"1", "false"},
 			{"2", "false"},
 		},
-		BenefitEligibility: []models.Benefit{
-			{ID: "1", IsEligible: false},
-			{ID: "2", IsEligible: false},
+		BenefitEligibility: []benefits.Benefit{
+			{ID: "1", Eligible: false},
+			{ID: "2", Eligible: false},
 		},
 	}
 
@@ -244,9 +242,9 @@ func TestNextQuestion_TwoQuestionsTrue(t *testing.T) {
 			{"1", "true"},
 			{"2", "true"},
 		},
-		BenefitEligibility: []models.Benefit{
-			{ID: "1", IsEligible: true},
-			{ID: "2", IsEligible: true},
+		BenefitEligibility: []benefits.Benefit{
+			{ID: "1", Eligible: true},
+			{ID: "2", Eligible: true},
 		},
 	}
 
