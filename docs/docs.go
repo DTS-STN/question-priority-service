@@ -51,10 +51,9 @@ var doc = `{
                 "operationId": "next-question",
                 "parameters": [
                     {
-                        "description": "value",
+                        "description": "Journey 1",
                         "name": "NextQuestion",
                         "in": "body",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/bindings.NextQuestionRequest"
                         }
@@ -70,19 +69,19 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                            "$ref": "#/definitions/renderings.QPSError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                            "$ref": "#/definitions/renderings.QPSError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/renderings.NextQuestionResponse"
+                            "$ref": "#/definitions/renderings.QPSError"
                         }
                     }
                 }
@@ -90,10 +89,54 @@ var doc = `{
         }
     },
     "definitions": {
+        "benefits.Benefit": {
+            "type": "object",
+            "properties": {
+                "eligible": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "bindings.NextQuestionRequest": {
             "type": "object",
             "properties": {
-                "key": {
+                "benefit_list": {
+                    "description": "Array of specific benefits to get the questions for",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "life_journeys": {
+                    "description": "Array of life journeys, which represent a subset of benefits",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "question_list": {
+                    "description": "List of answered priority questions",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Question"
+                    }
+                },
+                "request_date": {
+                    "description": "Date period for request in ms since epoch",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Question": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 }
             }
@@ -101,14 +144,31 @@ var doc = `{
         "renderings.NextQuestionResponse": {
             "type": "object",
             "properties": {
-                "key": {
-                    "type": "string"
+                "benefit_eligibility": {
+                    "description": "List of eligible and non-eligible benefits, populated as responses to\nprioritized questions are received",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/benefits.Benefit"
+                    }
                 },
-                "message": {
-                    "type": "string"
+                "question_list": {
+                    "description": "List of answered priority questions with their answers and the next priority\nquestion with a value of null",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Question"
+                    }
                 },
-                "success": {
-                    "type": "boolean"
+                "request_date": {
+                    "description": "Date period for request in ms since epoch",
+                    "type": "integer"
+                }
+            }
+        },
+        "renderings.QPSError": {
+            "type": "object",
+            "properties": {
+                "error_code": {
+                    "type": "string"
                 }
             }
         }

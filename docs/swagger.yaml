@@ -1,18 +1,64 @@
 basePath: /
 definitions:
+  benefits.Benefit:
+    properties:
+      eligible:
+        type: boolean
+      id:
+        type: string
+    type: object
   bindings.NextQuestionRequest:
     properties:
-      key:
+      benefit_list:
+        description: Array of specific benefits to get the questions for
+        items:
+          type: string
+        type: array
+      life_journeys:
+        description: Array of life journeys, which represent a subset of benefits
+        items:
+          type: string
+        type: array
+      question_list:
+        description: List of answered priority questions
+        items:
+          $ref: '#/definitions/models.Question'
+        type: array
+      request_date:
+        description: Date period for request in ms since epoch
+        type: integer
+    type: object
+  models.Question:
+    properties:
+      answer:
+        type: string
+      id:
         type: string
     type: object
   renderings.NextQuestionResponse:
     properties:
-      key:
+      benefit_eligibility:
+        description: |-
+          List of eligible and non-eligible benefits, populated as responses to
+          prioritized questions are received
+        items:
+          $ref: '#/definitions/benefits.Benefit'
+        type: array
+      question_list:
+        description: |-
+          List of answered priority questions with their answers and the next priority
+          question with a value of null
+        items:
+          $ref: '#/definitions/models.Question'
+        type: array
+      request_date:
+        description: Date period for request in ms since epoch
+        type: integer
+    type: object
+  renderings.QPSError:
+    properties:
+      error_code:
         type: string
-      message:
-        type: string
-      success:
-        type: boolean
     type: object
 host: localhost:8080
 info:
@@ -38,10 +84,9 @@ paths:
       - application/json
       operationId: next-question
       parameters:
-      - description: value
+      - description: Journey 1
         in: body
         name: NextQuestion
-        required: true
         schema:
           $ref: '#/definitions/bindings.NextQuestionRequest'
       produces:
@@ -54,14 +99,14 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/renderings.NextQuestionResponse'
+            $ref: '#/definitions/renderings.QPSError'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/renderings.NextQuestionResponse'
+            $ref: '#/definitions/renderings.QPSError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/renderings.NextQuestionResponse'
+            $ref: '#/definitions/renderings.QPSError'
       summary: Request Prioritized Questions
 swagger: "2.0"
