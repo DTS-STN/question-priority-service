@@ -89,6 +89,17 @@ var doc = `{
         }
     },
     "definitions": {
+        "benefits.Benefit": {
+            "type": "object",
+            "properties": {
+                "eligible": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
         "bindings.NextQuestionRequest": {
             "type": "object",
             "properties": {
@@ -119,17 +130,6 @@ var doc = `{
                 }
             }
         },
-        "models.Benefit": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "is_eligible": {
-                    "type": "boolean"
-                }
-            }
-        },
         "models.Question": {
             "type": "object",
             "properties": {
@@ -148,7 +148,7 @@ var doc = `{
                     "description": "List of eligible and non-eligible benefits, populated as responses to\nprioritized questions are received",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Benefit"
+                        "$ref": "#/definitions/benefits.Benefit"
                     }
                 },
                 "question_list": {
