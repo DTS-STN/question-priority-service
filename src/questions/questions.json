@@ -2,27 +2,32 @@
   {
     "id": 1,
     "description": "are you a resident of canada?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 2,
     "description": "are you a resident of ontario?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 3,
     "description": "what province do you live in?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 4,
     "description": "what is your age?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 5,
     "description": "what is your date of birth?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 6,
@@ -37,12 +42,14 @@
   {
     "id": 8,
     "description": "are you 55 or older?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 9,
     "description": "have you completed a driver's license course?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 10,
@@ -52,12 +59,14 @@
   {
     "id": 11,
     "description": "are you able to work?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 12,
     "description": "are you retired from work?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   },
   {
     "id": 6,
@@ -67,6 +76,7 @@
   {
     "id": 13,
     "description": "do you have a valid medical insurance card?",
-    "openfiscaids": ["1"]
+    "openfiscaids": ["1"],
+    "answer": ""
   }
 ]
