@@ -12,6 +12,7 @@ func osOpenMock(aString string) (*os.File, error) {
 	return os.Open("questions_test.json")
 }
 
+// anything that should be run a the end of the unit tests should go here
 func cleanUp() {
 	osOpen = os.Open
 	questions = nil
@@ -69,4 +70,21 @@ func TestReadFile(t *testing.T) {
 	// assertions
 	assert.NoError(t, err)
 	assert.Equal(t, expected, content)
+}
+
+func TestLoadQuestions(t *testing.T) {
+	defer cleanUp()
+
+	// redirect to test data
+	osOpen = osOpenMock
+
+	// Expected result data
+	expectedResult := []models.Question{{ID: "1", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"1"}}}
+
+	// Actual result data
+	actual, err := loadQuestions()
+
+	// Assertions
+	assert.NoError(t, err)
+	assert.Equal(t, expectedResult, actual)
 }

@@ -14,6 +14,8 @@ import (
 // The source is defined in the init function of the package.
 var questions []models.Question
 
+// The getter for questions.
+// If questions
 func Questions() []models.Question {
 	if questions == nil || len(questions) == 0 {
 		var err error
@@ -24,9 +26,11 @@ func Questions() []models.Question {
 	return questions
 }
 
-// please move on, don't worry about it
+// to make following more testable, we need to do this
 var osOpen = os.Open
 
+// Loads questions from an external source
+// Returns a list of questions
 func loadQuestions() (questions []models.Question, err error) {
 	// TODO make this file not hard coded
 	jsonFile, err := osOpen("questions.json")
@@ -47,6 +51,8 @@ func loadQuestions() (questions []models.Question, err error) {
 	return
 }
 
+// This functions reads and returns the data from the file opened in loadQuestions
+// Accepts a reader and returns a byte array
 func readFile(reader io.Reader) ([]byte, error) {
 	lines, err := ioutil.ReadAll(reader)
 	if err != nil {
