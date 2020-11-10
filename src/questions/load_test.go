@@ -44,8 +44,6 @@ func TestQuestions(t *testing.T) {
 	// Create a Mock for the interface
 	qsMock := new(QuestionServiceMock)
 	// Add a mock call request
-	//qsMock.On("Questions").
-	//	Return(nil)
 	qsMock.On("loadQuestions").
 		Return(expectedResult, nil)
 	// Set the mock to be used by the code
@@ -59,28 +57,63 @@ func TestQuestions(t *testing.T) {
 
 	// Assertions
 	assert.Equal(t, expectedResult, actual)
-	assert.Equal(t, expectedResult, questions)
 }
 
-//func TestPrefilledQuestions(t *testing.T) {
-//	defer cleanUp()
-//
-//	// prefill test data
-//	questions = []models.Question{{ID: "2", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"2"}}}
-//
-//	// redirect to test data
-//	osOpen = osOpenMock
-//
-//	// Expected result data
-//	expectedResult := []models.Question{{ID: "2", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"2"}}}
-//
-//	// Actual result data
-//	actual := QuestionService.Questions()
-//
-//	// Assertions
-//	assert.Equal(t, expectedResult, actual)
-//	assert.Equal(t, expectedResult, questions)
-//}
+func TestQuestionsNotEqual(t *testing.T) {
+	defer cleanUp()
+
+	var realQuestionService = QuestionServiceStruct{Filename: ""}
+
+	// Expected result data
+	expectedResult := []models.Question{{ID: "1", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"1"}}}
+
+	// Create a Mock for the interface
+	qsMock := new(QuestionServiceMock)
+	// Add a mock call request
+	qsMock.On("loadQuestions").
+		Return([]models.Question{{ID: "2", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"2"}}}, nil)
+	// Set the mock to be used by the code
+	QuestionService = QuestionInterface(qsMock)
+
+	// redirect to test data
+	osOpen = osOpenMock
+
+	// Actual result data
+	actual := realQuestionService.Questions()
+
+	// Assertions
+	assert.NotEqual(t, expectedResult, actual)
+}
+
+func TestPrefilledQuestions(t *testing.T) {
+	defer cleanUp()
+
+	var realQuestionService = QuestionServiceStruct{Filename: ""}
+
+	// Expected result data
+	expectedResult := []models.Question{{ID: "2", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"2"}}}
+
+	// prefill test data
+	questions = expectedResult
+
+	// Create a Mock for the interface
+	qsMock := new(QuestionServiceMock)
+	// mock a different result from loadQuestions, to prove that when questions is populated, loadQuestions isn't called
+	qsMock.On("loadQuestions").
+		Return([]models.Question{{ID: "1", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"1"}}}, nil)
+	// Set the mock to be used by the code
+	QuestionService = QuestionInterface(qsMock)
+
+	// redirect to test data
+	osOpen = osOpenMock
+
+	// Actual result data
+	actual := realQuestionService.Questions()
+
+	// Assertions
+	assert.Equal(t, expectedResult, actual)
+	assert.Equal(t, expectedResult, questions)
+}
 
 func TestReadFile(t *testing.T) {
 	defer cleanUp()
