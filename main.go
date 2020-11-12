@@ -10,7 +10,7 @@ import (
 // @version 1.0
 // @description This is a service to return questions that when answered will return elegible benefits.
 
-// @host localhost:8080
+// @host https://qps-dev.dev.dts-stn.com
 // @BasePath /
 
 func main() {
