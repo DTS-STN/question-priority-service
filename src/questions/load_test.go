@@ -2,6 +2,7 @@ package questions
 
 import (
 	"bytes"
+	"errors"
 	"github.com/DTS-STN/question-priority-service/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -23,18 +24,19 @@ func (m *QuestionServiceMock) loadQuestions() ([]models.Question, error) {
 	return args.Get(0).([]models.Question), args.Error(1)
 }
 
-func osOpenMock(aString string) (*os.File, error) {
+func osOpenMock(path string) (*os.File, error) {
 	return os.Open("questions_test.json")
 }
 
 // anything that should be run a the end of the unit tests should go here
-func cleanUp() {
+func setupTests() {
 	osOpen = os.Open
 	questions = nil
+	QuestionService = new(QuestionServiceStruct)
 }
 
 func TestQuestions(t *testing.T) {
-	defer cleanUp()
+	setupTests()
 
 	var realQuestionService = QuestionServiceStruct{Filename: ""}
 
@@ -60,7 +62,7 @@ func TestQuestions(t *testing.T) {
 }
 
 func TestQuestionsNotEqual(t *testing.T) {
-	defer cleanUp()
+	setupTests()
 
 	var realQuestionService = QuestionServiceStruct{Filename: ""}
 
@@ -86,7 +88,7 @@ func TestQuestionsNotEqual(t *testing.T) {
 }
 
 func TestPrefilledQuestions(t *testing.T) {
-	defer cleanUp()
+	setupTests()
 
 	var realQuestionService = QuestionServiceStruct{Filename: ""}
 
@@ -116,7 +118,7 @@ func TestPrefilledQuestions(t *testing.T) {
 }
 
 func TestReadFile(t *testing.T) {
-	defer cleanUp()
+	setupTests()
 
 	var buffer bytes.Buffer
 	buffer.WriteString("test read data. testing to see if readFile works")
@@ -133,13 +135,13 @@ func TestReadFile(t *testing.T) {
 }
 
 func TestLoadQuestions(t *testing.T) {
-	defer cleanUp()
+	setupTests()
 
 	// redirect to test data
 	osOpen = osOpenMock
 
 	// Expected result data
-	expectedResult := []models.Question{{ID: "1", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"1"}}}
+	expectedResult := []models.Question{{ID: "1", Description: "are you a resident?", Answer: "", OpenFiscaIds: []string{"1"}}}
 
 	// Actual result data
 	actual, err := QuestionService.loadQuestions()
@@ -147,4 +149,22 @@ func TestLoadQuestions(t *testing.T) {
 	// Assertions
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResult, actual)
+}
+
+// Bug: overriding osOpen is not returning an error when the file is non existent
+func TestLoadQuestionsError(t *testing.T) {
+	setupTests()
+
+	// redirect to test data
+	// want to return an error here
+	osOpen = func(path string) (*os.File, error) {
+		return &os.File{}, errors.New("missing file")
+	}
+
+	// Actual result data
+	results, err := QuestionService.loadQuestions()
+
+	// Assertions
+	assert.Error(t, err)
+	assert.Nil(t, results)
 }

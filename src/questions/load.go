@@ -25,12 +25,12 @@ func (q *QuestionServiceStruct) Questions() []models.Question {
 }
 
 // to make following more testable, we need to do this
+// trust me, I'm a developer
 var osOpen = os.Open
 
 // Loads questions from an external source
 // Returns a list of questions
 func (q *QuestionServiceStruct) loadQuestions() (questions []models.Question, err error) {
-	// TODO make this file not hard coded
 	jsonFile, err := osOpen(q.Filename)
 
 	if err != nil {
