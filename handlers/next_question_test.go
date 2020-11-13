@@ -33,7 +33,7 @@ func TestNextQuestion_NoQuestions(t *testing.T) {
 	sendRequestResult := renderings.NextQuestionResponse{
 		RequestDate: 100,
 		QuestionList: []models.Question{
-			{"1", ""},
+			{"1", "", "", nil},
 		},
 		BenefitEligibility: []benefits.Benefit{{ID: "1", Eligible: false}, {ID: "2", Eligible: false}},
 	}
@@ -81,8 +81,8 @@ func TestNextQuestion_QuestionOneFalse(t *testing.T) {
 	sendRequestResult := renderings.NextQuestionResponse{
 		RequestDate: 100,
 		QuestionList: []models.Question{
-			{"1", "false"},
-			{"2", ""},
+			{"1", "false", "", nil},
+			{"2", "", "", nil},
 		},
 		BenefitEligibility: []benefits.Benefit{
 			{ID: "1", Eligible: false},
@@ -133,8 +133,8 @@ func TestNextQuestion_QuestionOneTrue(t *testing.T) {
 	sendRequestResult := renderings.NextQuestionResponse{
 		RequestDate: 100,
 		QuestionList: []models.Question{
-			{"1", "true"},
-			{"2", ""},
+			{"1", "true", "", nil},
+			{"2", "", "", nil},
 		},
 		BenefitEligibility: []benefits.Benefit{
 			{ID: "1", Eligible: true},
@@ -186,8 +186,8 @@ func TestNextQuestion_TwoQuestionsFalse(t *testing.T) {
 	sendRequestResult := renderings.NextQuestionResponse{
 		RequestDate: 100,
 		QuestionList: []models.Question{
-			{"1", "false"},
-			{"2", "false"},
+			{"1", "false", "", nil},
+			{"2", "false", "", nil},
 		},
 		BenefitEligibility: []benefits.Benefit{
 			{ID: "1", Eligible: false},
@@ -239,8 +239,8 @@ func TestNextQuestion_TwoQuestionsTrue(t *testing.T) {
 	sendRequestResult := renderings.NextQuestionResponse{
 		RequestDate: 100,
 		QuestionList: []models.Question{
-			{"1", "true"},
-			{"2", "true"},
+			{"1", "true", "", nil},
+			{"2", "true", "", nil},
 		},
 		BenefitEligibility: []benefits.Benefit{
 			{ID: "1", Eligible: true},

@@ -10,13 +10,13 @@ import (
 
 var echoService *echo.Echo
 
-func Main(args []string){
+func Main(args []string) {
 	// Echo instance
 	echoService = echo.New()
 	service()
 }
 
-func service(){
+func service() {
 	echoService.Logger.SetLevel(log.DEBUG)
 
 	// Middleware

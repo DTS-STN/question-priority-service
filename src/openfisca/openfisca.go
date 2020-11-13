@@ -14,7 +14,7 @@ type OFInterface interface {
 	SendRequest(request *bindings.NextQuestionRequest) (renderings.NextQuestionResponse, error)
 }
 
-type OFService struct {}
+type OFService struct{}
 
 // Service that others can use to interact with OpenFisca functions
 var Service OFInterface
@@ -28,7 +28,7 @@ func (of OFService) SendRequest(NextQuestionRequest *bindings.NextQuestionReques
 	}
 
 	//TODO: Put url in a config
-	resp, err := http.Post("https://fd7a43f1-b30f-4895-836d-5b52cede5318.mock.pstmn.io/trace","application/json",  bytes.NewBuffer(requestBody))
+	resp, err := http.Post("https://fd7a43f1-b30f-4895-836d-5b52cede5318.mock.pstmn.io/trace", "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return renderings.NextQuestionResponse{}, err
 	}
