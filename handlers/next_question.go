@@ -39,11 +39,12 @@ func (h *Handler) NextQuestion(c echo.Context) (err error) {
 		return c.JSON(http.StatusBadRequest, nextQuestionResponse)
 	}
 
-	if nextQuestionResponse.QuestionList,
-		err = questions.GetNext(nextQuestionRequest.QuestionList); err != nil {
+	newList, err := questions.QuestionService.GetNext(nextQuestionRequest.QuestionList)
+	if err != nil {
 		c.Logger().Error(err)
 		return c.JSON(http.StatusBadRequest, nextQuestionResponse)
 	}
+	nextQuestionResponse.QuestionList = append(nextQuestionResponse.QuestionList, newList...)
 
 	return c.JSON(http.StatusOK, nextQuestionResponse)
 }

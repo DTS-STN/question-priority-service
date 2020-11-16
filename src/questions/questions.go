@@ -6,7 +6,8 @@ import (
 
 type QuestionInterface interface {
 	Questions() []models.Question
-	loadQuestions() ([]models.Question, error)
+	LoadQuestions() ([]models.Question, error)
+	GetNext(answers []models.Question) (nextQuestions []models.Question, err error)
 }
 
 type QuestionServiceStruct struct {

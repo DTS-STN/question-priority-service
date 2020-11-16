@@ -19,7 +19,12 @@ func (m *QuestionServiceMock) Questions() []models.Question {
 	return args.Get(0).([]models.Question)
 }
 
-func (m *QuestionServiceMock) loadQuestions() ([]models.Question, error) {
+func (m *QuestionServiceMock) LoadQuestions() ([]models.Question, error) {
+	args := m.Called()
+	return args.Get(0).([]models.Question), args.Error(1)
+}
+
+func (m *QuestionServiceMock) GetNext(answers []models.Question) (nextQuestions []models.Question, err error) {
 	args := m.Called()
 	return args.Get(0).([]models.Question), args.Error(1)
 }
@@ -46,7 +51,7 @@ func TestQuestions(t *testing.T) {
 	// Create a Mock for the interface
 	qsMock := new(QuestionServiceMock)
 	// Add a mock call request
-	qsMock.On("loadQuestions").
+	qsMock.On("LoadQuestions").
 		Return(expectedResult, nil)
 	// Set the mock to be used by the code
 	QuestionService = QuestionInterface(qsMock)
@@ -72,7 +77,7 @@ func TestQuestionsNotEqual(t *testing.T) {
 	// Create a Mock for the interface
 	qsMock := new(QuestionServiceMock)
 	// Add a mock call request
-	qsMock.On("loadQuestions").
+	qsMock.On("LoadQuestions").
 		Return([]models.Question{{ID: "2", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"2"}}}, nil)
 	// Set the mock to be used by the code
 	QuestionService = QuestionInterface(qsMock)
@@ -100,8 +105,8 @@ func TestPrefilledQuestions(t *testing.T) {
 
 	// Create a Mock for the interface
 	qsMock := new(QuestionServiceMock)
-	// mock a different result from loadQuestions, to prove that when questions is populated, loadQuestions isn't called
-	qsMock.On("loadQuestions").
+	// mock a different result from LoadQuestions, to prove that when questions is populated, LoadQuestions isn't called
+	qsMock.On("LoadQuestions").
 		Return([]models.Question{{ID: "1", Description: "are you a resident of canada?", Answer: "", OpenFiscaIds: []string{"1"}}}, nil)
 	// Set the mock to be used by the code
 	QuestionService = QuestionInterface(qsMock)
@@ -144,7 +149,7 @@ func TestLoadQuestions(t *testing.T) {
 	expectedResult := []models.Question{{ID: "1", Description: "are you a resident?", Answer: "", OpenFiscaIds: []string{"1"}}}
 
 	// Actual result data
-	actual, err := QuestionService.loadQuestions()
+	actual, err := QuestionService.LoadQuestions()
 
 	// Assertions
 	assert.NoError(t, err)
@@ -162,7 +167,7 @@ func TestLoadQuestionsError(t *testing.T) {
 	}
 
 	// Actual result data
-	results, err := QuestionService.loadQuestions()
+	results, err := QuestionService.LoadQuestions()
 
 	// Assertions
 	assert.Error(t, err)

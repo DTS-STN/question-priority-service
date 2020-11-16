@@ -17,7 +17,7 @@ var questions []models.Question
 func (q *QuestionServiceStruct) Questions() []models.Question {
 	if questions == nil || len(questions) == 0 {
 		var err error
-		if questions, err = QuestionService.loadQuestions(); err != nil {
+		if questions, err = QuestionService.LoadQuestions(); err != nil {
 			log.Error(err)
 		}
 	}
@@ -30,7 +30,7 @@ var osOpen = os.Open
 
 // Loads questions from an external source
 // Returns a list of questions
-func (q *QuestionServiceStruct) loadQuestions() (questions []models.Question, err error) {
+func (q *QuestionServiceStruct) LoadQuestions() (questions []models.Question, err error) {
 	jsonFile, err := osOpen(q.Filename)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func (q *QuestionServiceStruct) loadQuestions() (questions []models.Question, er
 	return
 }
 
-// This functions reads and returns the data from the file opened in loadQuestions
+// This functions reads and returns the data from the file opened in LoadQuestions
 // Accepts a reader and returns a byte array
 func readFile(reader io.Reader) ([]byte, error) {
 	lines, err := ioutil.ReadAll(reader)
