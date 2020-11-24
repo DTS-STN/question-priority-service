@@ -9,5 +9,4 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/echo-swagger v1.0.0
 	github.com/swaggo/swag v1.6.7
-	gopkg.in/square/go-jose.v2 v2.5.1
 )
